@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap 5 Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+
+    h2{
+        text-align: center;
+    padding: 0 20px 20px;
+    }
+
+.form-wrapper {
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 8px 2px #c7c7c7;
+}
+
+.error-message {
+  color: red;
+  display: none;
+}
+
+</style>
+
+
+
+</head>
+<body>
+
+    <div class="container mt-3">
+        <h2>Form Validation using javascript</h2>
+        <div class="form-wrapper">
+        <form id="myform">
+          <div class="mb-3 mt-3">
+            <label for="Name">Name:</label>
+            <input type="text" class="form-control" id="fName" placeholder="Enter Name" name="Name">
+            <small class="error-message" id="Errorfname"></small>
+          </div>
+
+          <div class="mb-3">
+            <label for="number">Mobile Number:</label>
+            <input type="number" class="form-control" id="mobileNumber" placeholder="Enter Mobile Number" name="pswd">
+            <small class="error-message" id="Errornumber"></small>
+        </div>
+
+          <div class="mb-3 mt-3">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="email">
+            <small class="error-message" id="ErrorEmail"></small>
+        </div>
+
+          <div class="mb-3">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+            <small class="error-message" id="Errorpwd"></small>
+        </div>
+          <!-- <div class="form-check mb-3">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" name="remember"> Remember me
+            </label>
+          </div> -->
+          <button type="submit">Submit</button>
+        </form>
+    </div>
+      </div>
+
+
+</body>
+
+<script>
+
+/*----store form field value in variable-------*/
+
+
+const form = document.getElementById(`myform`);
+const fname = document.getElementById(`fName`);
+const mobile = document.getElementById(`mobileNumber`);
+const Email = document.getElementById(`Email`);
+const password = document.getElementById(`pwd`);
+
+
+/*----addEventListener-----*/
+
+form.addEventListener(`submit`, (e) => {
+    // Add event listener for the 'submit' event on the 'form' element
+
+    e.preventDefault();
+    // Prevent the default form submission behavior
+
+    validateForm(); 
+    // Call the 'validateForm' function to perform form validation
+})
+
+
+function validateName() {
+    const namevalue = fname.value.trim();
+    // Retrieve the value from the 'fname' input field and remove leading/trailing whitespace
+
+    return namevalue.length >= 9;
+    // Check if the length of 'namevalue' is greater than or equal to 6
+    // Return true if the condition is met, indicating a valid name; otherwise, return false
+}
+
+function ValidaMobile() {
+    const Mobilenumber = mobile.value.trim();
+    // Retrieve the value from the 'mobile' input field and remove leading/trailing whitespace
+
+    return /^\d{10,}$/.test(Mobilenumber);
+    // Use a regular expression pattern to test if 'Mobilenumber' consists of 10 or more digits
+    // Return true if the pattern matches, indicating a valid mobile number; otherwise, return false
+}
+
+
+function validEmail() {
+    const email = Email.value.trim();
+    // Retrieve the value from the 'Email' input field and remove leading/trailing whitespace
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // Use a regular expression pattern to test if 'email' follows a basic email format
+    // The regular expression pattern breakdown:
+    // ^[^\s@]+: Starts with one or more characters that are not whitespace or '@'
+    // @: Followed by the '@' symbol
+    // [^\s@]+: Followed by one or more characters that are not whitespace or '@'
+    // \.: Followed by a period (dot)
+    // [^\s@]+: Followed by one or more characters that are not whitespace or '@'
+    // $: Represents the end of the string
+    // Return true if the pattern matches, indicating a valid email address; otherwise, return false
+}
+
+
+function passw() {
+    const passwordcheck = password.value.trim();
+    // Retrieve the value from the 'password' input field and remove leading/trailing whitespace
+
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(passwordcheck);
+    // Use a regular expression pattern to test if 'passwordcheck' meets the following criteria:
+    // - At least one lowercase letter
+    // - At least one uppercase letter
+    // - At least one digit
+    // - At least one special character from the set @$!%*?&
+    // - Consists of at least 8 characters from the set of uppercase letters, lowercase letters, digits, and special characters
+    // Return true if the pattern matches, indicating a valid password; otherwise, return false
+}
+
+
+
+
+function validateForm(){
+    resetErrors();
+  
+    if(!validateName()){
+        showError("Errorfname", "Please enter a valid Name (minimum 6 characters)");
+    }
+
+    if(!ValidaMobile()){
+        showError("Errornumber", "Please enter a valid Mobile (minimum 6 characters)");
+    }
+
+    if(!validEmail()){
+        showError("ErrorEmail", "Please enter a valid Email (minimum 6 characters)");
+    }
+
+    if(!passw()){
+        showError("Errorpwd", "Include both lower and upper (minimum 6 characters)");
+    }
+ 
+}
+
+function showError(id, message) {
+  const errorElement = document.getElementById(id);
+  // Retrieve the element with the given 'id' from the document
+
+  errorElement.textContent = message;
+  // Set the text content of the error element to the provided 'message'
+
+  errorElement.style.display = "block";
+  // Set the display style of the error element to "block" to make it visible
+}
+
+
+function resetErrors() {
+  const errorElements = document.querySelectorAll(".error-message");
+  // Retrieve all elements with the class "error-message" from the document
+  // This assumes there are one or more elements in the HTML markup with this class
+
+  errorElements.forEach((element) => {
+    element.textContent = "";
+    // Clear the text content of each error element
+    // This removes any existing error messages displayed inside the element
+
+    element.style.display = "none";
+    // Set the display style of each error element to "none" to hide them
+    // The "none" value removes the element from the document flow and makes it invisible
+  });
+}
+
+
+
+
+
+</script>
+
+
+</html>
